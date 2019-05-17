@@ -1,5 +1,7 @@
 from src.engine.base import BaseHandler
 from ..plugins import get_server_info
+import requests
+import json
 
 class AgentHandler(BaseHandler):
 
@@ -14,5 +16,9 @@ class AgentHandler(BaseHandler):
         :return:
         """
         # 采集硬盘、内存、网卡
-        ret = get_server_info(self)
-        print(ret)
+        info = get_server_info(self)
+        # res = requests.post(
+        #     url=self.asset_api,
+        #     data=json.dumps(info).encode('utf-8')
+        # )
+        print(info)

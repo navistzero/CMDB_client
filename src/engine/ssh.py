@@ -17,13 +17,3 @@ class SshHandler(BaseHandler):
         # 关闭连接
         ssh.close()
         return result
-
-    def handler(self):
-        """
-        SSH模式采集资产
-        :return:
-        """
-        # 采集硬盘、内存、网卡
-        print('ssh')
-        ret = get_server_info()
-        print(ret)

@@ -1,7 +1,7 @@
 
-from src.engine.base import BaseHandler
+from src.engine.base import SshAndSaltHandler
 
-class SaltHandler(BaseHandler):
+class SaltHandler(SshAndSaltHandler):
 
     def cmd(self, command, hostname):
         import salt.client
@@ -9,9 +9,3 @@ class SaltHandler(BaseHandler):
         result = local.cmd(hostname, 'cmd.run', [command])
         return result[hostname]
 
-    def handler(self):
-        """
-        salt模式采集资产
-        :return:
-        """
-        pass
