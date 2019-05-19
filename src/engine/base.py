@@ -1,6 +1,8 @@
 import abc
 from concurrent.futures import ThreadPoolExecutor
+from ..plugins import get_server_info
 import json
+import requests
 from lib.conf.config import settings
 
 # class BaseHandler(metaclass=abc.ABCMeta):
@@ -41,9 +43,8 @@ class SshAndSaltHandler(BaseHandler):
         info = get_server_info(self, hostname)
 
         # 发送到API
-        # res = requests.post(
-        #     url=self.asset_api,
-        #     data=json.dumps(info).encode('utf-8')
-        # )
-        # print(res.text)
-        print(info)
+        res = requests.post(
+            url=self.asset_api,
+            data=json.dumps(info).encode('utf-8')
+        )
+        print(res.text)

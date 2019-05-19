@@ -1,6 +1,7 @@
-from src.engine.base import BaseHandler
+from src.engine.base import SshAndSaltHandler
+from lib.conf.config import settings
 
-class SshHandler(BaseHandler):
+class SshHandler(SshAndSaltHandler):
 
     def cmd(self, command, hostname):
         import paramiko

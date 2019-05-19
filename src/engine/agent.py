@@ -17,8 +17,9 @@ class AgentHandler(BaseHandler):
         """
         # 采集硬盘、内存、网卡
         info = get_server_info(self)
-        # res = requests.post(
-        #     url=self.asset_api,
-        #     data=json.dumps(info).encode('utf-8')
-        # )
-        print(info)
+        res = requests.post(
+            url=self.asset_api,
+            data=json.dumps(info).encode('utf-8'),
+            headers={'Content-Type':'application/json'}
+        )
+        print(res.text)

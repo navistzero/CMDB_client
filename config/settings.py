@@ -6,9 +6,11 @@ ENGINE_DICT = {
 	'salt': 'src.engine.salt.SaltHandler',
 }
 PLUGINS_DICT = {
-    'disk': 'src.plugins.disk.Disk',
-    'memory': 'src.plugins.memory.Memory',
-    'NIC': 'src.plugins.nic.NIC',
+    # 'disk': 'src.plugins.disk.Disk',
+    # 'memory': 'src.plugins.memory.Memory',
+    # 'NIC': 'src.plugins.nic.NIC',
+    'CPU': 'src.plugins.cpu.CPU',
+    # 'board': 'src.plugins.board.BOARD',
 }
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 NAME="lijun"

@@ -1,6 +1,8 @@
 from .base import BasePlugin
 import os
 import re
+import traceback
+from lib.response import BaseResponse
 
 class NIC(BasePlugin):
     # def process(self, handler, hostname=None):
@@ -14,15 +16,22 @@ class NIC(BasePlugin):
 
     def linux(self, handler, hostname):
         # linux 执行命令
+        result = BaseResponse()
+        try:
+            if self.debug:
+                # 读取文件信息
+                output = open(os.path.join(self.base_dir, 'files', 'nic.out'), 'r').read()
+                interfaces_info = self._interfaces_ip(output)
+            else:
+                interfaces_info = self.linux_interfaces(handler, hostname)
+            result.data = self.parse(interfaces_info)
+        except Exception as e:
+            # result['status'] = False
+            # result['error'] = traceback.format_exc()
+            result.status=False
+            result.error=traceback.format_exc()
+        return result.dict
 
-        if self.debug:
-            output = open(os.path.join(self.base_dir, 'files', 'nic.out'), 'r').read()
-            interfaces_info = self._interfaces_ip(output)
-        else:
-            interfaces_info = self.linux_interfaces(handler, hostname)
-        self.standard(interfaces_info)
-
-        return interfaces_info
 
     def linux_interfaces(self, handler, hostname):
         '''

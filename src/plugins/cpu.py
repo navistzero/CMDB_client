@@ -14,7 +14,7 @@ import re
 import traceback
 from lib.response import BaseResponse
 
-class Disk(BasePlugin):
+class CPU(BasePlugin):
     # def __init__(self):
     #     super().__init__()
     def win(self,handler, hostname):
@@ -28,11 +28,12 @@ class Disk(BasePlugin):
         try:
             if self.debug:
                 # 读取文件信息
-                with open(os.path.join(self.base_dir,'files','disffdsk.out')) as f:
+                with open(os.path.join(self.base_dir,'files','cpuinfo.out')) as f:
                     ret = f.read()
             else:
                 ret = handler.cmd('sudo MegaCli  -PDList -aALL',hostname)
             result.data = self.parse(ret)
+            # result.data = ret
         except Exception as e:
             # result['status'] = False
             # result['error'] = traceback.format_exc()
@@ -48,7 +49,7 @@ class Disk(BasePlugin):
         """
         response = {}
         result = []
-        for row_line in content.split("\n\n\n\n"):
+        for row_line in content.split("\n\n"):
             result.append(row_line)
         for item in result:
             temp_dict = {}
@@ -58,24 +59,26 @@ class Disk(BasePlugin):
                 if len(row.split(':')) != 2:
                     continue
                 key, value = row.split(':')
-                name = self.mega_patter_match(key)
+                # print(key,"     ",value[:10])
+                name = key
                 if name:
-                    if key == 'Raw Size':
-                        raw_size = re.search('(\d+\.\d+)', value.strip())
-                        if raw_size:
-                            temp_dict[name] = raw_size.group()
-                        else:
-                            raw_size = '0'
+                    if key.startswith('flags'):
+                        temp_dict[name.strip()] = value[:15]
+                        # raw_size = re.search('(\d+\.\d+)', value.strip())
+                        # if raw_size:
+                        #     temp_dict[name] = raw_size.group()
+                        # else:
+                        #     raw_size = '0'
                     else:
-                        temp_dict[name] = value.strip()
-            if temp_dict:
-                response[temp_dict['slot']] = temp_dict
+                        temp_dict[name.strip()] = value.strip()
+            if temp_dict:               
+                response[temp_dict['processor']] = temp_dict
         return response
 
-    @staticmethod
-    def mega_patter_match(needle):
-        grep_pattern = {'Slot': 'slot', 'Raw Size': 'capacity', 'Inquiry': 'model', 'PD Type': 'pd_type'}
-        for key, value in grep_pattern.items():
-            if needle.startswith(key):
-                return value
-        return False
+    # @staticmethod
+    # def mega_patter_match(needle):
+    #     grep_pattern = {'Slot': 'slot', 'Raw Size': 'capacity', 'Inquiry': 'model', 'PD Type': 'pd_type'}
+    #     for key, value in grep_pattern.items():
+    #         if needle.startswith(key):
+    #             return value
+    #     return False
