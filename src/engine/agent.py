@@ -2,6 +2,8 @@ from src.engine.base import BaseHandler
 from ..plugins import get_server_info
 import requests
 import json
+from lib.conf.config import settings
+import os
 
 class AgentHandler(BaseHandler):
 
@@ -17,9 +19,32 @@ class AgentHandler(BaseHandler):
         """
         # 采集硬盘、内存、网卡
         info = get_server_info(self)
+        cert_path = settings.CERT_PATH
+        if not os.path.exists(cert_path):
+            # 没有文件 当前是新增主机
+            info['type'] = 'create'
+        else:
+            # 修改
+            with open(cert_path, 'r', encoding='utf-8') as f:
+                cert = f.read()  # 原主机名
+
+            hostname = info['basic']['data']['hostname']
+            if cert == hostname:
+                # 更新资产
+                info['type'] = 'update'
+            else:
+                # 更改主机名 +  更新资产
+                info['type'] = 'host_update'
+                info['hostname'] = cert
+
         res = requests.post(
             url=self.asset_api,
             data=json.dumps(info).encode('utf-8'),
             headers={'Content-Type':'application/json'}
         )
-        print(res.text)
+        response = res.json()
+        # if response.get('status'):
+        #     # 把主机名写入到文件中
+        #     with open(cert_path, 'w', encoding='utf-8') as f:
+        #         f.write(response.get('hostname'))
+        # # print(res.text)

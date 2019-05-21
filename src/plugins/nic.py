@@ -3,6 +3,7 @@ import os
 import re
 import traceback
 from lib.response import BaseResponse
+from lib.logger import logger
 
 class NIC(BasePlugin):
     # def process(self, handler, hostname=None):
@@ -24,12 +25,14 @@ class NIC(BasePlugin):
                 interfaces_info = self._interfaces_ip(output)
             else:
                 interfaces_info = self.linux_interfaces(handler, hostname)
-            result.data = self.parse(interfaces_info)
+            self.standard(interfaces_info)
+            result.data = interfaces_info
         except Exception as e:
             # result['status'] = False
             # result['error'] = traceback.format_exc()
             result.status=False
             result.error=traceback.format_exc()
+            logger.error(result.error)
         return result.dict
 
 

@@ -13,17 +13,15 @@ import os
 import re
 import traceback
 from lib.response import BaseResponse
+from lib.logger import logger
 
 class CPU(BasePlugin):
-    # def __init__(self):
-    #     super().__init__()
     def win(self,handler, hostname):
         ret = handler.cmd('dir', hostname)
         return ret[10:20]
 
     def linux(self,handler, hostname):
         # linux 执行命令
-        # result = {'status': True, 'error': None, 'data': None}
         result = BaseResponse()
         try:
             if self.debug:
@@ -31,54 +29,63 @@ class CPU(BasePlugin):
                 with open(os.path.join(self.base_dir,'files','cpuinfo.out')) as f:
                     ret = f.read()
             else:
-                ret = handler.cmd('sudo MegaCli  -PDList -aALL',hostname)
+                ret = handler.cmd('cat /proc/cpuinfo',hostname)
             result.data = self.parse(ret)
-            # result.data = ret
         except Exception as e:
-            # result['status'] = False
-            # result['error'] = traceback.format_exc()
             result.status=False
             result.error=traceback.format_exc()
+            logger.error(result.error)
         return result.dict
 
-    def parse(self, content):
+    @staticmethod
+    def parse(content):
         """
         解析shell命令返回结果
         :param content: shell 命令结果
         :return:解析后的结果
         """
-        response = {}
-        result = []
-        for row_line in content.split("\n\n"):
-            result.append(row_line)
-        for item in result:
-            temp_dict = {}
-            for row in item.split('\n'):
-                if not row.strip():
-                    continue
-                if len(row.split(':')) != 2:
-                    continue
-                key, value = row.split(':')
-                # print(key,"     ",value[:10])
-                name = key
-                if name:
-                    if key.startswith('flags'):
-                        temp_dict[name.strip()] = value[:15]
-                        # raw_size = re.search('(\d+\.\d+)', value.strip())
-                        # if raw_size:
-                        #     temp_dict[name] = raw_size.group()
-                        # else:
-                        #     raw_size = '0'
-                    else:
-                        temp_dict[name.strip()] = value.strip()
-            if temp_dict:               
-                response[temp_dict['processor']] = temp_dict
-        return response
+        response = {'cpu_count': 0, 'cpu_physical_count': 0, 'cpu_model': ''}
 
-    # @staticmethod
-    # def mega_patter_match(needle):
-    #     grep_pattern = {'Slot': 'slot', 'Raw Size': 'capacity', 'Inquiry': 'model', 'PD Type': 'pd_type'}
-    #     for key, value in grep_pattern.items():
-    #         if needle.startswith(key):
-    #             return value
-    #     return False
+        cpu_physical_set = set()
+        content = content.strip()
+        for item in content.split('\n\n'):
+            for row_line in item.split('\n'):
+                key, value = row_line.split(':')
+                key = key.strip()
+                if key == 'processor':
+                    response['cpu_count'] += 1
+                elif key == 'physical id':
+                    cpu_physical_set.add(value)
+                elif key == 'model name':
+                    if not response['cpu_model']:
+                        response['cpu_model'] = value
+        response['cpu_physical_count'] = len(cpu_physical_set)
+
+        return response
+    # def parse(self, content):
+    #     """
+    #     解析shell命令返回结果
+    #     :param content: shell 命令结果
+    #     :return:解析后的结果
+    #     """
+    #     response = {}
+    #     result = []
+    #     for row_line in content.split("\n\n"):
+    #         result.append(row_line)
+    #     for item in result:
+    #         temp_dict = {}
+    #         for row in item.split('\n'):
+    #             if not row.strip():
+    #                 continue
+    #             if len(row.split(':')) != 2:
+    #                 continue
+    #             key, value = row.split(':')
+    #             name = key
+    #             if name:
+    #                 if key.startswith('flags'):
+    #                     temp_dict[name.strip()] = value[:15]
+    #                 else:
+    #                     temp_dict[name.strip()] = value.strip()
+    #         if temp_dict:               
+    #             response[temp_dict['processor']] = temp_dict
+    #     return response

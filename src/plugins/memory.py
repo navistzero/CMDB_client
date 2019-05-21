@@ -3,6 +3,7 @@ import os
 from lib import convert
 from lib.response import BaseResponse
 import traceback
+from lib.logger import logger
 
 class Memory(BasePlugin):
     # def process(self, handler, hostname=None):
@@ -31,6 +32,7 @@ class Memory(BasePlugin):
             # result['error'] = traceback.format_exc()
             result.status=False
             result.error=traceback.format_exc()
+            logger.error(result.error)
         return result.dict
 
     def parse(self, content):

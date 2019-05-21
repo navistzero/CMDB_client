@@ -1,0 +1,30 @@
+2019-05-20 14:11:57,252 - cmdb - ERROR -logger:  Traceback (most recent call last):
+  File "E:\vs_django\CMDB\CMDB_client\src\plugins\disk.py", line 30, in linux
+    with open(os.path.join(self.base_dir,'files','disffdsk.out')) as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'E:\\vs_django\\CMDB\\CMDB_client\\files\\disffdsk.out'
+
+2019-05-20 14:26:28,572 - cmdb - ERROR -logger:  Traceback (most recent call last):
+  File "E:\vs_django\CMDB\CMDB_client\src\plugins\disk.py", line 30, in linux
+    with open(os.path.join(self.base_dir,'files','disffdsk.out')) as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'E:\\vs_django\\CMDB\\CMDB_client\\files\\disffdsk.out'
+
+2019-05-20 14:30:14,720 - cmdb - ERROR -logger:  Traceback (most recent call last):
+  File "E:\vs_django\CMDB\CMDB_client\src\plugins\disk.py", line 30, in linux
+    with open(os.path.join(self.base_dir,'files','disffdsk.out')) as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'E:\\vs_django\\CMDB\\CMDB_client\\files\\disffdsk.out'
+
+2019-05-20 17:36:22,449 - cmdb - ERROR -logger:  Traceback (most recent call last):
+  File "E:\vs_django\CMDB\CMDB_client\src\plugins\disk.py", line 30, in linux
+    with open(os.path.join(self.base_dir,'files','disffdsk.out')) as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'E:\\vs_django\\CMDB\\CMDB_client\\files\\disffdsk.out'
+
+2019-05-20 17:36:22,509 - cmdb - ERROR -logger:  Traceback (most recent call last):
+  File "E:\vs_django\CMDB\CMDB_client\src\plugins\nic.py", line 28, in linux
+    result.data = self.parse(interfaces_info)
+AttributeError: 'NIC' object has no attribute 'parse'
+
+2019-05-20 17:37:52,131 - cmdb - ERROR -logger:  Traceback (most recent call last):
+  File "E:\vs_django\CMDB\CMDB_client\src\plugins\nic.py", line 28, in linux
+    result.data = self.parse(interfaces_info)
+AttributeError: 'NIC' object has no attribute 'parse'
+

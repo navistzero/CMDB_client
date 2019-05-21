@@ -13,10 +13,9 @@ import os
 import re
 import traceback
 from lib.response import BaseResponse
+from lib.logger import logger
 
 class Disk(BasePlugin):
-    # def __init__(self):
-    #     super().__init__()
     def win(self,handler, hostname):
         ret = handler.cmd('dir', hostname)
         return ret[10:20]
@@ -28,16 +27,15 @@ class Disk(BasePlugin):
         try:
             if self.debug:
                 # 读取文件信息
-                with open(os.path.join(self.base_dir,'files','disffdsk.out')) as f:
+                with open(os.path.join(self.base_dir,'files','disk.out')) as f:
                     ret = f.read()
             else:
                 ret = handler.cmd('sudo MegaCli  -PDList -aALL',hostname)
             result.data = self.parse(ret)
         except Exception as e:
-            # result['status'] = False
-            # result['error'] = traceback.format_exc()
             result.status=False
             result.error=traceback.format_exc()
+            logger.error(result.error)
         return result.dict
 
     def parse(self, content):
