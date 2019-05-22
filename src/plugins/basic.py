@@ -41,7 +41,7 @@ class Basic(BasePlugin):
                 ret = {
                     'os_platform': 'linux',
                     'os_version': '6.5',
-                    'hostname': 'c2.com'
+                    'hostname': 'lijun',
                 }
             else:
                 ret = {

@@ -4,6 +4,8 @@ import requests
 import json
 from lib.conf.config import settings
 import os
+import time
+from lib.auth import gen_key
 
 class AgentHandler(BaseHandler):
 
@@ -37,14 +39,20 @@ class AgentHandler(BaseHandler):
                 info['type'] = 'host_update'
                 info['hostname'] = cert
 
+        # ctime = time.time()
+        ctime = 1
+        key = gen_key(ctime)
+
         res = requests.post(
             url=self.asset_api,
+            params={'key': key, 'ctime': ctime},
             data=json.dumps(info).encode('utf-8'),
             headers={'Content-Type':'application/json'}
         )
         response = res.json()
+        print(response.get("msg"))
         # if response.get('status'):
         #     # 把主机名写入到文件中
         #     with open(cert_path, 'w', encoding='utf-8') as f:
         #         f.write(response.get('hostname'))
-        # # print(res.text)
+        # print(res.text)

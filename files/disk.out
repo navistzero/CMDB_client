@@ -1,4 +1,5 @@
-                                     
+
+                                     
 Adapter #0
 
 Enclosure Device ID: 32
@@ -226,10 +227,10 @@ Drive has flagged a S.M.A.R.T alert : No
 
 
 Enclosure Device ID: 32
-Slot Number: 5
+Slot Number: 6
 Drive's postion: DiskGroup: 1, Span: 1, Arm: 1
 Enclosure position: 0
-Device Id: 5
+Device Id: 6
 WWN: 50025385A02AB5C9
 Sequence Number: 2
 Media Error Count: 0

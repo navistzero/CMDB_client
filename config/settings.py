@@ -20,3 +20,4 @@ ENGINE="agent"
 DEBUG = True
 ASSET_API = 'http://127.0.0.1:8000/asset/'
 CERT_PATH = os.path.join(BASE_DIR, 'config', 'cert')
+AUTH_KEY = 'ahahahahahahah'
